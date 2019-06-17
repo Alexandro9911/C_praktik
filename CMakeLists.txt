@@ -3,4 +3,4 @@ project(untitled5 C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(untitled5 main.c longCalculation.c longCalculation.h )
+add_executable(untitled5  longCalculation.c longCalculation.h Tests.c )

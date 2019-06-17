@@ -1,12 +1,8 @@
 #include <stdio.h>
 #include <malloc.h>
-#include <stdbool.h>
-#include <assert.h>
-#include "longCalculation.h"
 #include <string.h>
 #include <stdlib.h>
-#include <string.h>
-
+#include "longCalculation.h"
 char *nameInp;
 char *nameOut;
 int base;
@@ -25,9 +21,42 @@ void getFlag(char *fl){
     if(strcmp(fl,"-d") == 0){
         flag = 4;
     }
+    if(strcmp(fl,"-s") == 0){
+        flag =5;
+    }
+}
+
+void checkFlag(char arg[], int num){
+    if(num ==1){
+         int ch1 = strcmp(arg, "-p");
+         int ch2 = strcmp(arg, "-m");
+         int ch3 = strcmp(arg, "-a");
+         int ch4 = strcmp(arg, "-d");
+         int ch5 = strcmp(arg, "-s");
+         if(ch1 !=0 && ch2!=0 && ch3!=0 && ch4!=0 && ch5!=0){
+             printf("Wrong command: %s\n", arg);
+             exit(-5);
+         } else{
+             getFlag(arg);
+         }
+    }
+    if(num == 2) {
+        int pr = strcmp(arg, "-i");
+        if (pr != 0) {
+            printf("Wrong command: %s\n", arg);
+            exit(-5);
+        }
+    }
+    if(num == 3) {
+        int pr = strcmp(arg, "-o");
+        if (pr != 0 ) {
+            printf("Wrong command: %s\n", arg);
+            exit(-5);
+        }
+    }
 }
 void checkArgs(int argc, char **argv) {
-    if (argc <= 1 || argc >  6) {
+    if (argc !=  7) {
         printf("wrong command line");
         exit(-5);
     }
@@ -35,7 +64,8 @@ void checkArgs(int argc, char **argv) {
     //  -p plus
     //  -m minus
     //  -a multiplication
-    //  -d division
+    //  -d div
+    //  -s mod
     // argv[2] :
     //  -i флаг фходного файла
     // argv[3] :
@@ -46,19 +76,14 @@ void checkArgs(int argc, char **argv) {
     //  outFile.txt имя выходного файла
     // argv[6] :
     // base - int
-
-    if(strcmp(argv[1], "-p") !=0 && strcmp(argv[1], "-m") !=0 && strcmp(argv[1], "-a") !=0 &&
-    strcmp(argv[1], "-d") !=0 && strcmp(argv[2], "-i")!=0 && strcmp(argv[4],"-o")!= 0){
-        printf("wrong option : %s\n", argv[1]);
-        exit(-6);
-    } else{
-        getFlag(argv[1]);
-    }
+    checkFlag(argv[1],1);
+    checkFlag(argv[2],2);
+    checkFlag(argv[4],3);
+    char *end;
+    base = strtol(argv[6],&end,10);
     if(base == 0){
         printf(" Dont correct base : %s", argv[6]);
         exit(-10);
-    } else{
-        base = (int)argv[6] - '0';
     }
     if(strlen(argv[3]) ==0){
         printf("Empty inputfile name");
@@ -81,5 +106,7 @@ void clenUp(){
 int main(int argc, char **argv){
     checkArgs(argc,argv);
     work(nameInp,nameOut,base,flag);
+    printf("Done\n");
     clenUp();
+    clean();
 }
